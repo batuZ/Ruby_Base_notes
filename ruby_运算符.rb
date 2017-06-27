@@ -10,4 +10,4 @@ puts 3**3 	# => 27
 p "Ruby" =~ /by/ # => 2
 
 # => !~ 正则表达式 之 不匹配
-p "Ruby" !~ /by/
+p "Ruby" !~ /by/ # => false
