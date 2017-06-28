@@ -3,8 +3,8 @@ https://ruby-china.github.io/rails-guides/getting_started.html
 #	创建项目
 rails new ProjectName
 
-#	项目文件结构：
 
+#	项目文件结构：
 app/
 	包含应用的控制器、模型、视图、辅助方法、邮件程序、频道、作业和静态资源文件。这个文件夹是本文剩余内容关注的重点。
 
@@ -50,11 +50,48 @@ vendor/
 .gitignore
 	告诉 Git 要忽略的文件（或模式）。详情参见 GitHub 帮助文档。
 
+
 #	启动
 rails server
 rails s
 
+
 #	停止
 Ctrl + C
+
+
+#	创建页面及控制器，获得以下两个重要文件
+#	app/controllers/welcome_controller.rb 
+#	app/views/welcome/index.html.erb 
+rails generate controller Welcome index
+
+
+#	config/routes.rb 
+#	应用的路由文件,告诉 Rails 把访问请求发往哪个控制器和动作。
+Rails.application.routes.draw do
+	# 告诉 Rails 对 http://localhost:3000/welcome/index 的访问请求应该发往 welcome 控制器的 index 动作
+	get 'welcome/index'
+
+ 	# 告诉 Rails 对根路径的访问请求应该发往 welcome 控制器的 index 动作
+	root 'welcome#index'
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
