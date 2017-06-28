@@ -22,5 +22,7 @@ arr.each{|j| p j}
 arr = range.select{|k| k > 3}
 arr.each{|b| p b}
 
+# => 直接转换为array
+arr = 1
 
 # => 自定义类型也可以作为范围成员
