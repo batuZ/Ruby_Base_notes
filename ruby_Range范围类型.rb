@@ -10,6 +10,10 @@ p range if(range === 'z') # => 包括 ‘z’
 
 # Range 的常用方法
 
+# => 直接转换为array
+arr = (1..4).to_a
+p arr
+
 # => each 遍历范围内所有成员
 range.each{|i| p i}
 
@@ -22,7 +26,15 @@ arr.each{|j| p j}
 arr = range.select{|k| k > 3}
 arr.each{|b| p b}
 
-# => 直接转换为array
-arr = 1
+# => 范围的最大最小值
+range = 1..9
+p '----------------最小值--------------------'
+p range.begin()
+p range.min()
+p range.first()
+p '----------------最大值--------------------'
+p range.end()
+p range.max()
+p range.last()
 
 # => 自定义类型也可以作为范围成员
