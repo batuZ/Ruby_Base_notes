@@ -14,6 +14,7 @@ module Test
 		p 'kkkl'
 	end
 end
+
 module Asss
 	include Test
 	def getfuc
