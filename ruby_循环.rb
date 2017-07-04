@@ -39,10 +39,39 @@ loop{
 	p i and break if i > 9999
 }
 
-# => each 遍历数组、hash、对象的变量
+# each只是遍历数组的每个元素，并不生成新的数组(即，无返回值)
 p '------------ 集合.each ------------'
 dic = {	'a' => 'aaa','b' => 'bbb','c' => 'ccc'}
 dic.each{|k,v| p "#{k},#{v}" }
+
 arr = ['x','y','z']
 arr.each{|itm| p itm}
+
+# map遍历数组的每个元素，返回新生成的数组
+# collect作用与map完全相同
+p '------------ 集合.map(collect) ------------'
+def map_method
+  arr1 = ["name2","class2"]
+
+  # 这里的num是成员的copy，表达式不会影响集合
+  arr2 = arr1.each {|num| num += "and"}
+  p "each............",arr1,arr2
+
+  # 这里的num是成员的copy，表达式不会影响集合,但会返回一个新的被操作过的数组
+  arr2 = arr1.map {|num| num + "and"}
+  p "map............",arr1,arr2
+end
+map_method
+# => each............["name2", "class2"]
+# => map............["name2and", "class2and" ]
+
+
+p '------------ 集合.map!(collect!) ------------'
+def map1_method
+  arr1 = ["name2","class2"]
+  # 这里的num就是成员本身，表达式直接修改集合,同时返回一个新的被操作过的数组
+  arr2 = arr1.map! {|num| num + "and"}
+  p "map............",arr1,arr2
+end
+map1_method
 
