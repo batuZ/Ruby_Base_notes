@@ -1,0 +1,56 @@
+Mysql_常用命令.msq
+
+启动停止服务
+cmd>net start mysql57
+cmd>net stop mysql57
+
+连接数据库
+cmd>cd D:\Program Files\MySQL\MySQL Server 5.7\bin
+cmd>mysql -h主机地址 -P端口号 -u用户名 -p密码
+ex: mysql -hlocalhost -P3306 -uroot -p666666
+
+创建数据库
+mysql>create database my_db01 [创建参数];
+mysql>create database 测试库01;
+
+显示数据库内容
+mysql>show databases;				// 全部内容
+mysql>show databases like 'my%';	// 条件查询
+
+显示数据库创建信息
+mysql>show create database my_db01;
+
+文件夹会影响数据库名
+中文库名，会转为编码来命名文件夹
+
+创建表
+方法1 
+mysql> use my_db;		//指定到目标库
+mysql> create table tName(id int, name varchar(20));		
+方法2 					//通过决对路径
+mysql>create table my_db1.tName(id int, name varchar(20));
+mysql>create table 表名(列名 列类，列名 列类，...);
+
+查看库中的表
+mysql> show tables;					// 全部内容
+mysql> show tables like 't%';		// 条件查询
+
+查看表的创建信息
+mysql>show create table tname \G
+
+查看表的描述
+mysql>desc tname;
+
+删除表或库
+mysql>drop table [if exists] tname
+mysql>drop database [if exists] my_db1
+
+表的重命名
+mysql>rename table tname to newname
+跨数据库[转移]表
+mysql>rename table tname to newDataBase.newname
+
+修改表的定义
+mysql>alter table tname add FID int;
+mysql>alter table tname [add,drop,modify] 表名
+
