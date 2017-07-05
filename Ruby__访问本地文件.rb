@@ -113,6 +113,44 @@ p '------------------- 文件重命名 -------------------------------'
 # File.unlink(path)
 # 完全相同的方法，删除成功回已删除的文件个数，删除失败报错
 
-p '------------------- 定位当前文件所在目录 -------------------------------'
-p '当前文件在 ' << Dir.pwd
-p '当前文件在 ' << Dir.getwd # 又是完全相同的功能
+p '------------------- 定位当前目录 -------------------------------'
+p '当前目录在 ' << Dir.pwd
+p '当前目录在 ' << Dir.getwd # 又是完全相同的功能
+
+p '------------------- 跳转当前目录 -------------------------------'
+# Dir.chdir "usbDir" 进入当前目录的子目录，目录不存在会报错
+# Dir.chdir "C:\\"
+p '当前目录在 ' << Dir.pwd
+
+p '------------------- 删除目录 -------------------------------'
+dir = 'D:\etst'
+if FileTest.directory?dir 		# 判断dir是否为目录
+	begin
+		# Dir.delete dir
+		# Dir.remdir dir 
+		# Dir.unlink dir 	又是完全相同的功能，成功返回0，不成功报错
+	rescue Exception => e
+		p '删除失败',e
+	end
+p 88888888888888888
+end
+
+p '------------------- 遍历目录 -------------------------------'
+dir = 'D:\TCP-Server'
+# 获取所有子目录和当前目录下的文件
+Dir.foreach(dir){|d| p d}
+Dir.new(dir).each{|d| p d}  # 相同的功能，第一个是类方法，第二个是实例方法
+
+p '------------------- 文件路径 -------------------------------'
+# 获取路径的一部份
+path = 'D:\TCP-Server\TCP-Server\obj\Debug\TCP-Server.exe'
+p File.dirname(path)		# => "D:\\TCP-Server\\TCP-Server\\obj\\Debug"
+p File.basename path		# => "TCP-Server.exe"
+p File.basename path,".exe"	# => "TCP-Server"
+
+# 获取一个文件的决对路径
+file = 'ruby_IF.rb'
+p File.expand_path file
+
+# 组合出一个路径
+p File.join("A","BB","CCC") # => "A/BB/CCC"

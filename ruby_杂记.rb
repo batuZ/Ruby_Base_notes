@@ -8,3 +8,5 @@ gem安装的,无法在嵌入时使用..为啥.?
 
 因为你没 require 'enc/encdb'
 
+
+
