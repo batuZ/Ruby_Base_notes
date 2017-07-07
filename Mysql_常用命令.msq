@@ -8,8 +8,9 @@ cmd>net stop mysql57
 cmd>cd D:\Program Files\MySQL\MySQL Server 5.7\bin
 cmd>mysql -h主机地址 -P端口号 -u用户名 -p密码
 ex: mysql -hlocalhost -P3306 -uroot -p666666
+cmd>mysql -hroot -p
 
-创建数据库
+--------------创建数据库
 mysql>create database my_db01 [创建参数];
 mysql>create database 测试库01;
 
@@ -23,20 +24,28 @@ mysql>show create database my_db01;
 文件夹会影响数据库名
 中文库名，会转为编码来命名文件夹
 
-创建表
+---------------创建表
 方法1 
 mysql> use my_db;		//指定到目标库
-mysql> create table tName(id int, name varchar(20));		
+mysql> create table tName(
+	-> id int primary kye auto_increment, 
+	-> name varchar(20))
+	-> ;		
 方法2 					//通过决对路径
-mysql>create table my_db1.tName(id int, name varchar(20));
-mysql>create table 表名(列名 列类，列名 列类，...);
+mysql>create table my_db1.tName(
+	-> id int primary kye auto_increment,
+	-> name varchar(20));
+mysql>create table 表名(
+	-> 列名 列类 主键\外键(primary kye) 自动增长(auto_increment)，
+	-> 列名 列类，
+	-> ...);
 
 查看库中的表
 mysql> show tables;					// 全部内容
 mysql> show tables like 't%';		// 条件查询
 
 查看表的创建信息
-mysql>show create table tname \G
+mysql> show create table tname \G
 
 查看表的描述
 mysql>desc tname;
@@ -52,5 +61,224 @@ mysql>rename table tname to newDataBase.newname
 
 修改表的定义
 mysql>alter table tname add FID int;
-mysql>alter table tname [add,drop,modify] 表名
+mysql>alter table 表名 [add,drop,modify] 列名
 
+------------------数据的增、删、改、查
+增加一条数据(先表看一下表中的列及列类型 show create table tname \G)
+mysql> insert into 表名(目标列1,目标列1,...) values(value1,value2,...);
+ex > insert into tname(s_1,s_2) values(aaa , bbbb);
+
+查看表中的数据
+mysql> select 目标列名1，列名2，... from 表名 where 查询条件(bool);
+在 tname 表的id列和name列中查找id大于5且小于20的数据
+ex > select id,name from tname where id<20&&id<5;
+查询tname表中的全部内容
+ex > select * from tname;
+
+修改表中的数据
+mysql> update 表名 set 列名1=newValue1,列名2=newValue2,... where 指定目标数据
+ex > update tname set id=4,name='dawang' where id=1;
+
+删除表中的数据
+mysql> delete from 表名 where 指定目标数据
+ex > delete from tname where id=3;
+
+
+---------------------校对规则（排序规则）
+
+查看mysql所有变量 
+mysql> show variables;
+查看字符集相关的变量 
+mysql> show variables like 'character_set%';
+
+创建数据库或表时使用校对规则
+mysql> create table tableName(
+		-> id int,
+		-> name varchar(20)
+		-> )character set gbk collate gbk_chinese_ci;
+			指定编码			指定校对规则
+
+设置编码和校对规则
+mysql> set names gbk
+
+相看更多排序规则字符集 show collation;
+
+GBK 国标       	2字节
+utf-8 国标通用	3字节
+
+体现校对规则的效果(order by)
+mysql> select * from tname order by name(要排序的列名)
+
+
+--------------------------- 数据类型
+1、整数
+			字节数		最小值(有符号\unsigned)		最大值(有符号\unsigned)
+tiny int		1			-128\0					127\255(常用)
+small int		2			-23768\0				32767\65535
+medium insert	3			-8388608\0				8388607\16777215
+int\intege		4			-2147483648\0			214748647\4294967295(常用)
+bigint			8			-9223372036854775808\0	9223372036854775807\18446744073709551615
+
+insert时值超范围会报错
+zerofill 设置当前列的显示宽度，用来终一显示，不影响值
+
+ex > create table test_table(
+	-> column1 tinyint unsigned,
+	-> column2 int(默认为有符号),
+	-> column3 int(2 最小宽度为2) zerofill(这时，个位数前都会补0)
+	-> );
+
+
+2、bool 
+	0  false
+	>0 true
+
+3、小数
+float		4		-3.402823466E+38			to	3.402823466E+38
+double		8		-1.7976931348623157E+308	to	1.7976931348623157E+308
+decimal		4~65	
+
+mysql> creat table test_table(
+	-> test_float float,
+	-> test_doulbe double,
+	-> test_decimal decimal(11,5)总位数为11，小数部份为5位
+	-> );
+
+
+#=>float: 1234567890.0123456789	->		1234570000
+#=>double:1234567890.0123456789	->		1234567890.0123458
+
+4、时间日期
+datatime	8	YYYY-MM-DD HH-mm-ss		1000-01-01 00:00:00  to  9999-12-31 23:59:59
+timestamp	4	YYYY-MM-DD HH-mm-ss		1970-01-01 00:00:00  to  2038-01-31 23:59:59
+date 		3	YYYY-MM-DD				1000-01-01 			 to  9999-12-31
+time  		3	HH-mm-ss				-838:59:59			 to  838:59:59
+year		1	YYYY 					1901      			 to  2155
+
+ex > create table time_table(
+	-> data_look datatime
+	-> );
+ex > insert into time_table values(
+	-> '2017-5-2 11:41:33'
+	-> );
+ex > insert into time_table values(
+	-> '201752114133'
+	-> );
+
+5、字符串	最大长度
+char 		256								定义时指定长度，GBK127,utf8 85	
+varchar		66635 - 1(null)-2(记录长度)		定义时指定长度，GBK32767,utf8 21845
+tinytext,text,mediumtext,longtext			定义时不用指定长度，
+
+			char(5)					varchar(5)
+''			5字符 gbk(5*2字节)		1字节
+abc			5字符 utf8(5*3字节)		4字节
+abcde		5字符 					6字节
+
+char指定了长度就一定会占用，不论是否有内容，空间固定，速度快但占用空间大(常用)
+varchar的5是最大长度，实际占用空间按内容变化，结省空间，效率不如char
+text与varchar类似，有最大长度，实际占用受内容影响
+
+6、枚举enum
+enum		最大长度65535		内部为整数，枚举
+ex > create table enum_t(
+	-> uType enum('A','B','C','D','E')
+	-> );
+ex > insert into enum_t values('E');只能选一个
+ex > insert into enum_t values(5); 同上
+ex > select uType*0 from enum_t; 数字方式显示
+当前列只能使用'A','B','C','D','E'，且只能选一个
+
+
+7、set 集合
+set 集合		最大长度64个成员	
+ex > create table set_t(
+	-> uSet set('Aa','Bb','Cc','Dd','Ee')
+	-> );
+ex > insert into set_t valuse('Bb,Cc,Dd');可多选
+当前列只能使用'Aa','Bb','Cc','Dd','Ee'，可多选，不能用整数代表
+
+8、二进制类型，存放文件
+binary(char)\varbinary(varchar)\blob(text)	二进制数据类型
+
+
+--------------------------- 列的约束属性
+对列的约束设定：
+Reference					关联操作
+Default value 				默认值
+Primary key | unique key 	主键|唯一键
+auto_increment				自动增长 插入数据时可以不添这列内容
+null | notnull				是否可以为空，默认为可以为空null
+comment 					列的注释
+foreign kye 				外键关联
+
+班级表
+ex > create table i_class(
+	-> class_id int primary key auto_increment,主键，自动增长，
+	-> class_name varchar(20) not null default 'xxx' comment '班级名称'，
+							  不能为空    默认值         列注释
+	-> )character utf8;
+学生表
+ex > create table i_student(
+	-> stu_id int primary key auto_increment,		学生ID
+	-> stu_name varchar(20) no null default '',		学生名
+	-> at_class int,								所在班级
+	->
+	-> foreign key(at_class) references i_class(class_id) 外键
+		 当前表     当前列      映射     目标表   目标列
+	->	 
+	-> )character utf8;
+
+删除外键
+mysql> show create table i_student \G 找到外键名
+mysql> alter table i_student drop 外键名
+
+增加外键 级联 当映射列中被映射的数据删除时，当前表的关联数据置为null				on update cascade;	更新时同时更新
+mysql> alter table i_student add foreign key(at_class) references i_class(class_id) on delete set null; 删除时设置为空
+																					on delete cascade;	删除时同时删除，同步动作
+																					restrict 默认，不让主表删除或更新
+
+------------------------------------- 储存引擎
+					myisam			innoDB			BDB				Memory			Archive
+批量插入速度		高				低				高				高				非常高			
+事物安全							1				1								
+全文索引			1				1												
+锁机制				表锁			行锁			页锁			表锁			行锁
+存储限制			无				64TB			无				有 				
+B树索引 			1				1				1				1		
+希哈索引							1								1
+集群索引							1
+数据缓存							1
+索引缓存			1				1								1
+数据可压缩			1																1
+空间使用			低				高				低				中 				低
+内存使用			低				高				低				中 				低
+支持外键							1
+
+查看储存引擎设置：D:\ProgramData\MySQL\MySQL Server 5.7\my.ini
+97行 default-storage-engine=INNODB 可以在这里手动修改
+或通过命令修改某表的存储引擎
+mysql> alter table i_class engine myisam
+
+说明:
+innoDB 为单文件存储，文件中包括数据和索引，数据量增到一定量时会产生第二个文件（ibdata1,ibdata2,...）
+myisam 一个表由三个文件组成
+	Tbl_name.frm 	结构
+	Tbl_name.MYD 	数据
+	Tbl_name.MYI 	索引
+
+------------------------------------- 排序、限制查询显示、去重复显示、联合查询
+排序 order by   正序asc 默认，倒序 desc
+ex > select * from i_student order by str_id desc;
+
+限制显示的数量 limit 
+ex > select * from i_strdent limit 3;		只显示前三条
+ex > select * from i_strdent limit 3,2;		跳过前三条显示后面的两条
+
+不显示重复 distinct
+ex > select distinct from i_strdent;
+
+联合查询 union 把两条或更多的查询句子写在一起，结果合在一起返回
+ex -> (select class_id from i_class where 1)
+	-> union
+	-> (select class_id from i_class where 2)
