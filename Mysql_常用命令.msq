@@ -1,4 +1,6 @@
 Mysql_常用命令.msq
+/usr/local/mysql-5.7.18-macos10.12-x86_64/bin/mysql -uroot -proot
+show databases;
 
 启动停止服务
 cmd>net start mysql57
@@ -233,15 +235,18 @@ ex > create table i_student(
 mysql> show create table i_student \G 找到外键名
 mysql> alter table i_student drop 外键名
 
-增加外键 级联 当映射列中被映射的数据删除时，当前表的关联数据置为null				on update cascade;	更新时同时更新
-mysql> alter table i_student add foreign key(at_class) references i_class(class_id) on delete set null; 删除时设置为空
-																					on delete cascade;	删除时同时删除，同步动作
-																					restrict 默认，不让主表删除或更新
-
+增加外键 级联 当映射列中被映射的数据删除时，当前表的关联数据置为null					
+mysql> alter table i_student 
+	-> add 
+	-> foreign key(at_class) 		on update cascade;	更新时同时更新
+	-> references i_class(class_id) on delete set null; 删除时设置为空
+									on delete cascade;	删除时同时删除，同步动作
+									restrict 默认，不让主表删除或更新
+										
 ------------------------------------- 储存引擎
 					myisam			innoDB			BDB				Memory			Archive
 批量插入速度		高				低				高				高				非常高			
-事物安全							1				1								
+事务安全							1				1								
 全文索引			1				1												
 锁机制				表锁			行锁			页锁			表锁			行锁
 存储限制			无				64TB			无				有 				
@@ -327,9 +332,102 @@ mysql> select * 					//输出内容
 	还原：新建并进入一个空库,部份还原要进入目标库然后执行
 	mysql>source 保存路径
 
-------------------------------------- 虚拟视图
+c虚拟table, 视图view
+语法：
+mysql>create view v_Name as 查询语句
+创建
+ex > creat view v_newBook 
+	-> as 
+	-> select * form t_book;
+修改
+ex > alter view v_newBook as selece b_name form t_book;
+删除
+ex > drop view if exists v_newBook;
+
+视图就是把一条或一系列查询动作记录下来，以类似一个table的形式放在database中，
+只是表现形式像table,并不是一个实体，其内容是从实体table中查询出来组合而成的
+
+------------------------------------- 事务概念
+为实现某目标而进行的所有操作，视为一个整体动作，这个整体就是事务
+特点：事务中有任意一务操作失败，则事务不成功，需要退回到事务所有操作以前，
+只有所有操作都成功完成，事务才完成，可以提交事务结果到库中。
+
+手动设置自动提交参数
+mysql> set autocommit=0		关闭自动提交,默认为1 开启状态
+mysql> ....					操作库
+mysql> commit;				操作成功，手动提交
+mysql> rollback;			操作失败，回滚到上次提交成功状态			
+
+通过 start transaction 或 begin 创建事务
+
+mysql> start transaction；	或用begin开始一个事务，此时，autocommit=0
+							start transaction 是 mysql的标准语句，推荐使用
+							bigen也被支持，但还存在其它语意，不推荐使用
+mysql> do something;		事务内容
+mysql> ...
+mysql> commit;				提交事务，或rollback撤销事务。
+							此时，autocommti恢复到start transaction前的状态。
+
+creata table 本身就是一个事务，不能被rollback
 
 
+------------------------------------- 触发器 trigger
+监听数据，并执行指定的操作，是与表有关的命名数据库对象，当表上出现特定事件时，将激活该对象。
 
+触发器可以禁止或回滚违反引用完整性的更改，从而取消所尝试的数据修改。
+
+CREATE TRIGGER trigger_name trigger_time trigger_event
+  			ON tbl_name FOR EACH ROW trigger_stmt
+
+mysql> create trigger 触发器名 被监听的数据事件 执行操作
+ex > create trigger tg_1
+	-> after update					//监听事伯：insert,delete,update 及时机 after,before
+										//每个表只能有一种监听事件，如，只有能一个 after insert
+	-> on i_student 				//监听对象
+	-> for each row 				//触发器语言
+	-> update i_class 				//指定的操作
+	-> set str_id = str_id+50; 
+
+------------------------------------- delimiter 定义确认执行符
+mysql确认执行符默认为 ; 
+一般用于多行语句或执行事务时，中间会出现 ; 但此时不应执行解释，可以通过 delimiter 进行修改
+ex > delimiter $$ 				// 一般改为 $$ 或 \\ ,且改完后不要加结束符，否则结束符将参与定义
+ex > begin
+ex > ...						//语句块或事务
+ex > end
+ex > $$							//确认执行
+ex > delimiter ;				//恢复默认
+
+
+------------------------------------- 编程，函数
+注示		# 或 --
+变量		set @val = 4;
+		select * from i_class where class_id = 3 into @cls3;(必须只返回一行，否则报错)
+随机函数	select rand();
+格式化	format(3.1415926,3); #=>3.14
+时间		select now();
+截字符串	select substring("abcd",1,2) #=> bc
+.....
+...
+.
+
+------------------------------------- 自定义函数
+定义
+mysql> create function 函数名（参数列表）返回值类型
+mysql> 函数体
+
+ex >drop function if exises fun;
+ex >delimiter $$
+ex >create function fun(a int) returns int
+ex >beging
+ex > return 'hello world!';
+ex >end
+ex >$$
+ex >delimiter ;
+
+ex >select fun(55);
+
+1418错误，开启自定义函数功能
+mysql> set global log_bin_function_creators=1
 
 			
