@@ -7,12 +7,12 @@
 # dbh = DBI.connect("dbi:Mysql:my_db01:127.0.0.1:3306", "root", "root")
 
 # ------------------------------------ mysql2
-=begin
+
 # ruby 直接访问mysql 效率高于DBI
 # 要先安装 mysql2模块 gem install mysql2
 # 在程序中模拟操作控制台
 require 'mysql2'
-
+=begin
 #创建数据库连接对象
 client = Mysql2::Client.new(
     #:host     => 'localhost', # 主机
@@ -29,10 +29,10 @@ results.each{|row|p row # hash 列名 => 值
 }
 
 #创建表
-#results = client.query("create table t_groups(
-				# grup_name varchar(22),
-				# photo_count int,
-				# fouce double)")
+results = client.query("create table t_groups(
+				grup_name varchar(22),
+				photo_count int,
+				fouce double)")
 
 #查表的创建信息
 results = client.query("show create table t_photos")
