@@ -6,14 +6,14 @@ i=0
 j=10
 
 p '-----------while----------'
-while j>i do
+while j>i 
 	p i += 1
 end 
 
 # => until 与 while 条件相反，表达式不成立则执行，成立则退出循环
 p'-----------until----------'
 i=0
-until j<i do
+until j<i 
 	p i += 1
 end
 

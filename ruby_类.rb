@@ -8,13 +8,13 @@
 
 class Point < Struct.new :X,:Y
 	# => 构造方法
-	# def initialize x,y
-	# 	# => 定义在方法中的实例变量，只有在方法被调用过才有效
-	# 	# => 定义在方法外的实例变量，只有在类被初始化了才有效
-	# 	# => 但它们的作用域都在类内全部位置
-	# 	@X = x
-	# 	@Y = y
-	# end
+	def initialize x,y
+		# => 定义在方法中的实例变量，只有在方法被调用过才有效
+		# => 定义在方法外的实例变量，只有在类被初始化了才有效
+		# => 但它们的作用域都在类内全部位置
+		@X = x
+		@Y = y
+	end
 
 
 	# => 定义方法
@@ -32,6 +32,7 @@ class Point < Struct.new :X,:Y
 		return '求和：' << num.to_s
 	end
 
+	private
 	# => 定义默认参数方法
 	def add a = 3 ,b
 		a + b
@@ -47,6 +48,11 @@ class Point < Struct.new :X,:Y
 	def Point.classFunc
 		p '调用了类方法！'
 	end
+	# 或
+	def self.classFunc1
+		p '调用了类方法！'
+	end
+
 	p '------------- 类变量  -----------'
 	@@pointName = "PPP"
 
@@ -68,6 +74,14 @@ class Point < Struct.new :X,:Y
 	attr_accessor :like ,:love 	# => 设为可读写
 	attr :like,false			# => 设为只读
 	attr :love,true				# => 设为可读写
+end
+
+# => 扩充类
+class Point #与目标类同名
+	# => 扩充的方法，也可以是类方法
+	def newFunc
+		
+	end
 end
 
 # => 嵌套类的另一种形式

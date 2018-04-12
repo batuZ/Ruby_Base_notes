@@ -39,3 +39,16 @@ gem contents rake #显示rake包中所包含的文件
 gem dependency rails -v 0.10.1 #列出与rails相互依赖的包
 gem environment #查看gem的环境
 gem sources #查看镜像
+
+
+# => ruby test.rb 会语音朗读
+system "say 你是谁啊，你在哪啊"
+# => 可以用来debug代码
+for i in 1..10
+	system "say #{i}"
+end
+
+
+
+# 查看对象所有的方法 methods
+"".methods
