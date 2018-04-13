@@ -2,7 +2,7 @@
 
 =begin
 to_s	转为字符串
-to_i	转为正数
+to_i	转为正数	8.5.round() 四舍五入
 to_f	转为小数
 to_a	转为数组
 to_time	转为时间

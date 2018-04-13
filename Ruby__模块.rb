@@ -8,21 +8,20 @@
 # 7､ 类引插入模块的两种形式：（模块中的方法不变，插入关键字不同，用法不同）
 	# (1) include 模块中的方法成为类的实例方法，需要new后调用
 	# (2) extend  模块中的方法成为类方法，可以直接class.fuc调用
-p '------- 嵌套模块的使用 ----------'
+
+
+
 module Test
+	PI =3.14
 	def fuc
 		p 'kkkl'
 	end
-end
-
-module Asss
-	include Test
-	def getfuc
-		Test.fuc
+	def self.getfuc
+		p 'fdfdf'
 	end
 end
 
-include Asss
-Asss.getfuc
-Asss.fuc
-
+include Test
+Test.fuc
+Test.getfuc
+puts Test::PI

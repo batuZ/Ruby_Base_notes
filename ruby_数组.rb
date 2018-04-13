@@ -66,3 +66,15 @@ p allArr - arr2
 p '-------arr.concat 基于原数组操作--------'
 newAllArr = arr1.concat(arr2.concat(arr3))
 p newAllArr , arr1 , arr2 , newAllArr - arr2
+
+# => 两个数组的运算
+list1 = (1..5).to_a
+list2 = (2..7).to_a
+p '-------求交集--------'
+p list1 & list2
+
+p '-------求并集--------'
+p list1 | list2
+
+p '-------求合集--------'
+p list1 + list2

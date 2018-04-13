@@ -49,6 +49,10 @@ for i in 1..10
 end
 
 
-
 # 查看对象所有的方法 methods
 "".methods
+
+# 数学模块
+include Math
+puts Math::PI
+

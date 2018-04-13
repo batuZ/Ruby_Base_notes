@@ -18,3 +18,23 @@ p "Ruby" !~ /by/ # => false
 # => 如果a大于b，返回值是1
 a,b = 3,4
 p a<=>b
+
+# => 三元运算时，中间都要有空格，不然会报错
+puts a>b ? a : b
+
+# => 重载运算符
+
+class Test
+	attr_accessor :X,:Y
+	def initialize x,y
+		@X = x
+		@Y = y
+	end
+	def + (kk)
+		Test.new @X+kk.X , @Y+kk.Y
+	end
+end
+
+c = (Test.new 4,5) + (Test.new 7,8)
+puts c.X
+puts c.Y

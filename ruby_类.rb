@@ -69,11 +69,11 @@ class Point < Struct.new :X,:Y
 		@X = value
 	end
 	# => ruby内置属性设置方法
-	attr_reader :like ,:love 	# => 创建属性，并设为只读
-	attr_writer :like ,:love 	# => 设为只写
-	attr_accessor :like ,:love 	# => 设为可读写
-	attr :like,false			# => 设为只读
-	attr :love,true				# => 设为可读写
+	attr_reader :X ,:Y 		# => 创建属性，并设为只读
+	attr_writer :X ,:Y 		# => 设为只写
+	attr_accessor :X ,:Y 	# => 设为可读写
+	attr :X,false			# => 设为只读
+	attr :Y,true			# => 设为可读写
 end
 
 # => 扩充类
