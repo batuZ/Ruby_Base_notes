@@ -61,8 +61,6 @@ p '带 ‘!’ 会修改并返回原对象,如果没有修改则返回 nil', str
 
 
 
-
-=begin
 # => 合并字符串
 p '---------合并字符串--------------'
 str1 = 'I like '
@@ -107,4 +105,40 @@ $KCODE = 'n' # => None （与 ASCII 相同）。
 $KCODE = 'e' # => EUC
 $KCODE = 'a' # => ASCII 默认
 
-=end
+
+
+
+关于ruby中 %Q, %q, %W, %w, %x, %r, %s 的用法
+
+以上各种符号可以看做是【返回一个新结果的函数】
+如: str = %Q(asdm,fds"fdf") # => asdm,fds"fdf"
+
+各自功能如下：
+%Q 当需要返回的结果中包括双引号时使用，相当于双引号的另一种表现形式
+	str = "asdm,fds"fdf"" # => 无效
+	str = %Q(asdm,fds"fdf")
+%q 与 %Q 功能相同，但不支持#{}转义，相当于单引号的另一种表现形式
+
+%W 把字符串按空格拆分开，转变为数组，但词尾带[\]时，将无视\后的一个空格
+	var = 'batu'
+	strArr = %W(I am #{var} chines\  man\ women)
+	# => ["I", "am", "batu", "chines ", "man women"]
+%w 与 %W 功能相同，但不支持#{}转义
+
+%X 与`方法一样，执行（）内的命令,%x不接受转义
+	def foo
+		Dir.mkdir('D:\newDir\aa')
+	end
+	puts %x(echo foo:#{foo}) # => foo:0
+
+%R 用于正则表达式 %r不接受转义
+	res = %R(/home/#{foo})
+	# => "/\\/home\\/Foo/"
+
+%s 用于符号。它不受表达式替换或转义序列的限制。
+	>> %s(foo)
+	=> :foo
+	>> %s(foo bar)
+	=> :"foo bar"
+	>> %s(#{foo} bar)
+	=> :"\#{foo} bar"
