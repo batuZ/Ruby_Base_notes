@@ -74,4 +74,3 @@ def map1_method
   p "map............",arr1,arr2
 end
 map1_method
-
