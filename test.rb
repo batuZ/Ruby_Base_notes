@@ -1,37 +1,37 @@
 class A
+	Cre  =789
 	def initialize
-		@var =3
-		@@var1 =6
+		@var = 4
 	end
 end
 #     instance_eval
 
-# A.instance_eval {
-# 	define_method :b do
-#     	puts 'fdfdf'
-#   	end
-# }
-# A.new.b
 
-# A.instance_eval do
-#     def hello
-#         p "hello"
-#     end
-# end
-# A.hello
+# ------------- 实例变量 O-----------------------
+	# a = A.new
+	# a.instance_eval do
+	#     def hello
+	#         puts @var
+	#     end
+	# end
+	# a.hello
+# ------------- 实例变量 O-----------------------
+	# A.class_eval do
+	#     def hello
+	#          puts @var
+	#     end
+	# end
+	# A.new.hello
+# ------------- 类变量 -----------------------
+A.instance_eval do
+    def hello
+	    puts "aaa"
+    end
+    puts "bbbb"
+end
+puts A.hello
 
-
-# a = A.new
-# a.instance_eval do
-#     def hello
-#         p "hello"
-#     end
-# end
-# a.hello
-
-
-
-
+# ------------- 类变量 -----------------------
 # A.singleton_class.class_eval do
 #     def hello
 #         p "hello"
@@ -41,14 +41,8 @@ end
 
 
 
-# A.class_eval do
-#     def hello
-#         p "hello"
-#     end
-# end
-# A.new.hello
 
-# A.instance_exec("hellos"){|x| p "#{x}"}
+ # A.instance_exec("hellos"){|x| p "#{x}"}
 
 
 
