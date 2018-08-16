@@ -22,13 +22,19 @@ p'-----------for in----------'
 for itm in 1..9			# => 用于范围
 	p itm
 end
+
 dic = {	'a' => 'aaa','b' => 'bbb','c' => 'ccc'}
 for itm in dic.keys		# => 用于hash
 	p itm
 end
+
 arr = ['x','y','z']
 for itm in arr			# => 用于数组
 	p itm
+end
+
+5.times do |i|
+  p i
 end
 
 # => loop Ruby独有的迭代器
