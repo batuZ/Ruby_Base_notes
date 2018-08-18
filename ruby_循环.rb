@@ -33,9 +33,21 @@ for itm in arr			# => 用于数组
 	p itm
 end
 
+# 执行5次
+p'-----------4.times----------'
 5.times do |i|
   p i
 end
+
+# 从4依次执行到9
+p'-----------4.upto(9)----------'
+4.upto(9){ |i| puts i }
+#=> 4
+#=> 5
+#=> 6
+#=> 7
+#=> 8
+#=> 9
 
 # => loop Ruby独有的迭代器
 # => loop会对代码块无限循环，直到遇到 break 跳出
@@ -80,3 +92,10 @@ def map1_method
   p "map............",arr1,arr2
 end
 map1_method
+	
+	
+p '------------ 集合.find_all{} ------------'
+	
+[1,2,3,4,5].find_all{|i| i>3 }
+#=> [4,5]
+	
